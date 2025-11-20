@@ -1,0 +1,10 @@
+# AI
+langchain4j:
+  open-ai:
+    chat-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: sk-bfe945e9e91d44ef91e7b22c66b4805f
+      model-name: qwen-max
+      log-requests: true
+      log-responses: true
+      max-tokens: 8192
