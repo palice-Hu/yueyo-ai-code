@@ -10,6 +10,7 @@ import com.yueyo.yueyoraicodemother.model.enums.CodeGenTypeEnum;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
+@Deprecated
 public class CodeFileSaver {
 
     // 保存代码文件的根目录

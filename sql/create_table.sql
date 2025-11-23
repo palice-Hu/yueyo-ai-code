@@ -1,4 +1,3 @@
-
 # 数据库初始化
 -- 创建库
 create database if not exists yueyor_ai_code_mother;
@@ -8,7 +7,6 @@ use yueyor_ai_code_mother;
 
 -- 用户表
 -- 以下是建表语句
-
 
 
 -- 用户表
@@ -27,4 +25,26 @@ create table if not exists user
     isDelete     tinyint      default 0                 not null comment '是否删除',
     UNIQUE KEY uk_userAccount (userAccount),
     INDEX idx_userName (userName)
-    ) comment '用户' collate = utf8mb4_unicode_ci;
+) comment '用户' collate = utf8mb4_unicode_ci;
+
+
+create table if not exists app
+(
+    id          bigint auto_increment comment 'id' primary key,
+    appName     varchar(256)                       null comment 'app名称',
+    cover       varchar(512)                       null comment 'app封面',
+    initPrompt  text                               null comment 'app初始化的prompt',
+    codeGenType varchar(64)                        null comment '代码生成方式',
+    deployKey   varchar(64)                        null comment '部署标识',
+    deployTime  datetime                           null comment '部署时间',
+    priority    int      default 0 comment '优先级',
+    userId      bigint                             null comment '用户id',
+    editTime    datetime default CURRENT_TIMESTAMP not null comment '编辑时间',
+    createTime  datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete    tinyint  default 0                 not null comment '是否删除',
+    UNIQUE KEY uk_deployKey (deployKey),
+    INDEX idx_appName (appName),
+    INDEX idx_userId (userId)
+) comment 'app' collate = utf8mb4_unicode_ci;
+
