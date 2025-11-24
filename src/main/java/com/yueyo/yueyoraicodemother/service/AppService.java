@@ -4,7 +4,9 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.yueyo.yueyoraicodemother.model.dto.AppQueryRequest;
 import com.yueyo.yueyoraicodemother.model.entity.App;
+import com.yueyo.yueyoraicodemother.model.entity.User;
 import com.yueyo.yueyoraicodemother.model.vo.AppVO;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -39,5 +41,18 @@ public interface AppService extends IService<App> {
      * @return 应用 VO
      */
     AppVO getAppVO(App app);
+
+
+    /**
+     * 聊天生成代码
+     *
+     * @param appId       应用id
+     * @param message     聊天内容
+     * @param loginUser   登录用户
+     * @return 生成的代码
+     */
+    Flux<String> chatToGenCode(Long appId, String message, User loginUser);
+
+    String deployApp(Long appId, User loginUser);
 }
 

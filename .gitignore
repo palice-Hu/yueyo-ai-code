@@ -3,7 +3,6 @@
 tmp/
 !**/src/main/resources/application-local.yml
 
-
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
