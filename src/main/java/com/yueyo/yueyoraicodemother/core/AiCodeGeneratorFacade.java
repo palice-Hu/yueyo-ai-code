@@ -1,6 +1,7 @@
 package com.yueyo.yueyoraicodemother.core;
 
 import com.yueyo.yueyoraicodemother.ai.AiCodeGeneratorService;
+import com.yueyo.yueyoraicodemother.ai.AiCodeGeneratorServiceFactory;
 import com.yueyo.yueyoraicodemother.ai.model.HtmlCodeResult;
 import com.yueyo.yueyoraicodemother.ai.model.MultiFileCodeResult;
 import com.yueyo.yueyoraicodemother.core.parser.CodeParserExecutor;
@@ -25,8 +26,9 @@ import java.io.File;
 public class AiCodeGeneratorFacade {
 
 
+
     @Resource
-    private AiCodeGeneratorService aiCodeGeneratorService;
+    private AiCodeGeneratorServiceFactory aiCodeGeneratorServiceFactory;
 
 
 
@@ -41,9 +43,11 @@ public class AiCodeGeneratorFacade {
         if (codeGenTypeEnum == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
+        // 根据 appId 获取对应的 AI 服务实例
+        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId);
         return switch (codeGenTypeEnum) {
             case HTML -> {
-                HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode(userMessage);
+                HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode(1, userMessage);
                 yield CodeFileSaverExecutor.executeSaver(result, CodeGenTypeEnum.HTML, appId);
             }
             case MULTI_FILE -> {
@@ -67,6 +71,8 @@ public class AiCodeGeneratorFacade {
         if (codeGenTypeEnum == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
+        // 根据 appId 获取对应的 AI 服务实例
+        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId);
         return switch (codeGenTypeEnum) {
             case HTML -> {
                 Flux<String> codeStream = aiCodeGeneratorService.generateHtmlCodeStream(userMessage);

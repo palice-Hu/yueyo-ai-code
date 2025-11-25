@@ -1,20 +1,37 @@
 spring:
   application:
     name: yueyor-ai-code-mother-backend
+  profiles:
+    active: local
   # mysql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/yueyor_ai_code_mother
     username: root
     password: YueyorRoot2024!
-  profiles:
-    active: local
+  # redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      username: default
+      password: YueyorRedis2024!
+      ttl: 3600
+  # session 配置
+  session:
+    store-type: redis
+    # session 30 天过期
+    timeout: 2592000
+
 
 server:
   port: 8123
   servlet:
     context-path: /api
-
+    # cookie 30 天过期
+    session:
+      cookie:
+        max-age: 2592000
 
 
 # springdoc-openapi

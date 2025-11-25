@@ -63,7 +63,7 @@ public class AppAdminController {
      * @param appAdminUpdateRequest 更新请求
      * @return 更新结果
      */
-    @PostMapping("/admin/update")
+    @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateAppByAdmin(@RequestBody AppAdminUpdateRequest appAdminUpdateRequest) {
         if (appAdminUpdateRequest == null || appAdminUpdateRequest.getId() == null) {
@@ -89,7 +89,7 @@ public class AppAdminController {
      * @param appQueryRequest 查询请求
      * @return 应用列表
      */
-    @PostMapping("/admin/list/page/vo")
+    @PostMapping("/list/page/vo")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<AppVO>> listAppVOByPageByAdmin(@RequestBody AppQueryRequest appQueryRequest) {
         ThrowUtils.throwIf(appQueryRequest == null, ErrorCode.PARAMS_ERROR);
@@ -111,7 +111,7 @@ public class AppAdminController {
      * @param id 应用 id
      * @return 应用详情
      */
-    @GetMapping("/admin/get/vo")
+    @GetMapping("/get/vo")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<AppVO> getAppVOByIdByAdmin(long id) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
