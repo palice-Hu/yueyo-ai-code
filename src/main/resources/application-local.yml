@@ -15,3 +15,14 @@ langchain4j:
       max-tokens: 8192
       log-requests: true
       log-responses: true
+
+
+# 添加 COS 对象存储配置（需要从腾讯云获取）
+cos:
+  client:
+    host: https://ai-code-screenshots-1317259809.cos.ap-nanjing.myqcloud.com
+    secretId: AKIDBGG6jGahaFn8GAqJYdVBeuxmOmwtd9lA
+    secretKey: EE3g6JJ6f082iDapumTxEIXcU9aoqfGd
+    region: ap-nanjing
+    bucket: ai-code-screenshots-1317259809
+
