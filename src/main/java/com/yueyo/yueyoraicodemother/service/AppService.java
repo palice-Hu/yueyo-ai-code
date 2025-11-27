@@ -2,6 +2,7 @@ package com.yueyo.yueyoraicodemother.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
+import com.yueyo.yueyoraicodemother.model.dto.AppAddRequest;
 import com.yueyo.yueyoraicodemother.model.dto.AppQueryRequest;
 import com.yueyo.yueyoraicodemother.model.entity.App;
 import com.yueyo.yueyoraicodemother.model.entity.User;
@@ -17,6 +18,8 @@ import java.util.List;
  */
 public interface AppService extends IService<App> {
 
+
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
 
     /**
      * 获取查询包装类

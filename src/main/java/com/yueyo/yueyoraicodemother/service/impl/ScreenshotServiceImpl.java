@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.yueyo.yueyoraicodemother.exception.ErrorCode;
 import com.yueyo.yueyoraicodemother.exception.ThrowUtils;
 import com.yueyo.yueyoraicodemother.manager.CosManager;
+import com.yueyo.yueyoraicodemother.service.ScreenshotService;
 import com.yueyo.yueyoraicodemother.utils.WebScreenshotUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

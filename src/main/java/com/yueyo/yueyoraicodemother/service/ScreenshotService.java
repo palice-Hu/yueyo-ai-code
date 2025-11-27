@@ -1,4 +1,4 @@
-package com.yueyo.yueyoraicodemother.service.impl;
+package com.yueyo.yueyoraicodemother.service;
 
 public interface ScreenshotService {
     String generateAndUploadScreenshot(String webUrl);
