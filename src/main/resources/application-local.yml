@@ -26,3 +26,13 @@ cos:
     region: ap-nanjing
     bucket: ai-code-screenshots-1317259809
 
+
+# Pexels 图片搜索配置
+pexels:
+  api-key: PfKVgURsjLmcYU47kFkcN1qPeuzlUz3R3airYTE1MoI2M8uQqtdl5ft9
+
+
+# 阿里云 DashScope 配置
+dashscope:
+  api-key: sk-bfe945e9e91d44ef91e7b22c66b4805f
+  image-model: wan2.2-t2i-flash
