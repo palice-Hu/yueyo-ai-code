@@ -2,12 +2,11 @@ package com.yueyo.yueyoraicodemother.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.yueyo.yueyoraicodemother.ai.tools.ToolManager;
+import com.yueyo.yueyoraicodemother.ai.tools.*;
 import com.yueyo.yueyoraicodemother.exception.BusinessException;
 import com.yueyo.yueyoraicodemother.exception.ErrorCode;
 import com.yueyo.yueyoraicodemother.model.enums.CodeGenTypeEnum;
 import com.yueyo.yueyoraicodemother.service.ChatHistoryService;
-import com.yueyo.yueyoraicodemother.utils.SpringContextUtil;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -26,7 +25,7 @@ import java.time.Duration;
 @Slf4j
 public class AiCodeGeneratorServiceFactory {
 
-    @Resource(name = "openAiChatModel")
+    @Resource
     private ChatModel chatModel;
 
     @Resource
@@ -61,51 +60,24 @@ public class AiCodeGeneratorServiceFactory {
         chatHistoryService.loadChatHistoryToMemory(appId, chatMemory, 20);
         // 根据代码生成类型选择不同的模型配置
         return switch (codeGenType) {
-            case VUE_PROJECT -> {
-                // 使用多例模式的 StreamingChatModel 解决并发问题
-                StreamingChatModel reasoningStreamingChatModel = SpringContextUtil.getBean("reasoningStreamingChatModelPrototype", StreamingChatModel.class);
-                yield AiServices.builder(AiCodeGeneratorService.class)
-                        .streamingChatModel(reasoningStreamingChatModel)
-                        .chatMemoryProvider(memoryId -> chatMemory)
-                        .tools(toolManager.getAllTools())
-                        .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
-                                toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
-                        ))
-                        .build();
-            }
-            case HTML, MULTI_FILE -> {
-                // 使用多例模式的 StreamingChatModel 解决并发问题
-                StreamingChatModel openAiStreamingChatModel = SpringContextUtil.getBean("streamingChatModelPrototype", StreamingChatModel.class);
-                yield AiServices.builder(AiCodeGeneratorService.class)
-                        .chatModel(chatModel)
-                        .streamingChatModel(openAiStreamingChatModel)
-                        .chatMemory(chatMemory)
-                        .build();
-            }
+            // Vue 项目生成使用推理模型
+            case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
+                    .streamingChatModel(reasoningStreamingChatModel)
+                    .chatMemoryProvider(memoryId -> chatMemory)
+                    .tools(toolManager.getAllTools())
+                    .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
+                            toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
+                    ))
+                    .build();
+            // HTML 和多文件生成使用默认模型
+            case HTML, MULTI_FILE -> AiServices.builder(AiCodeGeneratorService.class)
+                    .chatModel(chatModel)
+                    .streamingChatModel(openAiStreamingChatModel)
+                    .chatMemory(chatMemory)
+                    .build();
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR,
                     "不支持的代码生成类型: " + codeGenType.getValue());
         };
-
-        // 根据代码生成类型选择不同的模型配置
-//        return switch (codeGenType) {
-//            // Vue 项目生成使用推理模型
-//            case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
-//                    .streamingChatModel(reasoningStreamingChatModel)
-//                    .chatMemoryProvider(memoryId -> chatMemory)
-//                    .tools(toolManager.getAllTools())
-//                    .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
-//                            toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
-//                    ))
-//                    .build();
-//            // HTML 和多文件生成使用默认模型
-//            case HTML, MULTI_FILE -> AiServices.builder(AiCodeGeneratorService.class)
-//                    .chatModel(chatModel)
-//                    .streamingChatModel(openAiStreamingChatModel)
-//                    .chatMemory(chatMemory)
-//                    .build();
-//            default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR,
-//                    "不支持的代码生成类型: " + codeGenType.getValue());
-//        };
     }
 
 
