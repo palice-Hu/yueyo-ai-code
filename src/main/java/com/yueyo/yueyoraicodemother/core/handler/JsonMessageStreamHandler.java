@@ -6,7 +6,6 @@ import cn.hutool.json.JSONUtil;
 import com.yueyo.yueyoraicodemother.ai.model.message.*;
 import com.yueyo.yueyoraicodemother.ai.tools.BaseTool;
 import com.yueyo.yueyoraicodemother.ai.tools.ToolManager;
-import com.yueyo.yueyoraicodemother.constant.AppConstant;
 import com.yueyo.yueyoraicodemother.core.builder.VueProjectBuilder;
 import com.yueyo.yueyoraicodemother.model.entity.User;
 import com.yueyo.yueyoraicodemother.model.enums.ChatHistoryMessageTypeEnum;
@@ -65,8 +64,9 @@ public class JsonMessageStreamHandler {
                     chatHistoryService.addChatMessage(appId, aiResponse, ChatHistoryMessageTypeEnum.AI.getValue(), loginUser.getId());
 
                     // 异步构造 Vue 项目
-                    String projectPath = AppConstant.CODE_OUTPUT_ROOT_DIR + "/vue_project_" + appId;
-                    vueProjectBuilder.buildProjectAsync(projectPath);
+//                    String projectPath = AppConstant.CODE_OUTPUT_ROOT_DIR + "/vue_project_" + appId;
+//                    vueProjectBuilder.buildProjectAsync(projectPath);
+                    // 为了用户体验，这里改为在门面的完成消息的回调中同步构建，而不是异步构造
                 })
                 .doOnError(error -> {
                     // 如果AI回复失败，也要记录错误消息
