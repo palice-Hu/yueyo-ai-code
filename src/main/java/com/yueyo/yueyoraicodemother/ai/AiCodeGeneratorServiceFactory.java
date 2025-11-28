@@ -3,6 +3,7 @@ package com.yueyo.yueyoraicodemother.ai;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.yueyo.yueyoraicodemother.ai.guardrail.PromptSafetyInputGuardrail;
+import com.yueyo.yueyoraicodemother.ai.guardrail.RetryOutputGuardrail;
 import com.yueyo.yueyoraicodemother.ai.tools.ToolManager;
 import com.yueyo.yueyoraicodemother.exception.BusinessException;
 import com.yueyo.yueyoraicodemother.exception.ErrorCode;
@@ -11,6 +12,7 @@ import com.yueyo.yueyoraicodemother.service.ChatHistoryService;
 import com.yueyo.yueyoraicodemother.utils.SpringContextUtil;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
+import dev.langchain4j.guardrail.config.OutputGuardrailsConfig;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.StreamingChatModel;
@@ -39,6 +41,10 @@ public class AiCodeGeneratorServiceFactory {
     @Resource
     private ToolManager toolManager;
 
+    OutputGuardrailsConfig outputGuardrailsConfig = OutputGuardrailsConfig.builder()
+            .maxRetries(3)
+            .build();
+
 
 
     /**
@@ -64,6 +70,8 @@ public class AiCodeGeneratorServiceFactory {
                         .chatMemoryProvider(memoryId -> chatMemory)
                         .tools(toolManager.getAllTools())
                         .inputGuardrails(new PromptSafetyInputGuardrail())
+                        .outputGuardrails(new RetryOutputGuardrail())
+                        .outputGuardrailsConfig(outputGuardrailsConfig)
                         .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
                                 toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
                         ))
@@ -77,6 +85,8 @@ public class AiCodeGeneratorServiceFactory {
                         .streamingChatModel(openAiStreamingChatModel)
                         .chatMemory(chatMemory)
                         .inputGuardrails(new PromptSafetyInputGuardrail())
+                        .outputGuardrails(new RetryOutputGuardrail())
+                        .outputGuardrailsConfig(outputGuardrailsConfig)
                         .build();
             }
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR,
