@@ -41,6 +41,7 @@ public class AiCodeGeneratorServiceFactory {
     @Resource
     private ToolManager toolManager;
 
+
     OutputGuardrailsConfig outputGuardrailsConfig = OutputGuardrailsConfig.builder()
             .maxRetries(3)
             .build();
