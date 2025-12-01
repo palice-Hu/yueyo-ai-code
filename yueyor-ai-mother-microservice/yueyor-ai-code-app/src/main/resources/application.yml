@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: yueyo-ai-code-app
+  # session
+  session:
+    store-type: redis
+    # 30 days expire
+    timeout: 2592000
+  # mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yueyor_ai_code_mother
+    username: root
+    password: YueyorRoot2024!
+  # redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      username: default
+      password: YueyorRedis2024!
+      ttl: 3600
+server:
+  port: 8125
+  servlet:
+    context-path: /api
+    # 30 days expire
+    session:
+      cookie:
+        max-age: 2592000
+# AI
+langchain4j:
+  open-ai:
+    chat-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: sk-bfe945e9e91d44ef91e7b22c66b4805f
+      model-name: qwen-max
+      log-requests: true
+      log-responses: true
+      max-tokens: 8192
+    streaming-chat-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: sk-bfe945e9e91d44ef91e7b22c66b4805f
+      model-name: qwen-max
+      max-tokens: 8192
+      log-requests: true
+      log-responses: true
+    reasoning-streaming-chat-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: sk-bfe945e9e91d44ef91e7b22c66b4805f
+      model-name: qwen-plus
+      max-tokens: 32768
+      log-requests: true
+      log-responses: true
+      temperature: 0.1
+    # 智能路由 AI 模型配置（用于简单的分类任务）
+    routing-chat-model:
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      api-key: sk-bfe945e9e91d44ef91e7b22c66b4805f
+      model-name: qwen-max
+      log-requests: true
+      log-responses: true
+
+
+# springdoc-openapi
+springdoc:
+  group-configs:
+    - group: 'default'
+      packages-to-scan: com.yueyo.yueyoraicodemother.controller
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
